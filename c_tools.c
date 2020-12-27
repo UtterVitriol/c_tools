@@ -59,7 +59,10 @@ int get_input(char *buffer, int len)
 
 int malloc_array_2d(struct array_2d *array, int max_string_len)
 {
-    // malloc 2d array based on the len attribute and the max length for each string
+    /* malloc 2d
+     * array.len is the number of strings
+     * max_string_len is the length of each string
+     */ 
     array->arrays = malloc(array->len * sizeof(char*));
 
     for (int i = 0; i < array->len; i++){
@@ -78,7 +81,7 @@ int print_array_2d(char *format, struct array_2d *array)
      * format is expected to be "%s" at a minimum.
      * if "%d" is present in format, the index of the string will be printed in that position
      * 
-    */
+     */
 
     // get position of "%d" if present
     char *int_format_pos = strstr(format, "%d");
