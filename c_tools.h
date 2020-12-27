@@ -9,4 +9,4 @@ struct array_2d{
 
 int get_input(char *, int);
 int free_array_2d(struct array_2d *);
-int int_from_str(char *, int *, char *);
+char *int_from_str(char *, int *);
