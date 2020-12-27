@@ -57,7 +57,7 @@ int free_array_2d(struct array_2d *array)
 char  *int_from_str(char *string_ptr, int *number)
 {
     // gets int from string
-    // pEnd is a pointer to the position in the string after the last integer found
+    // returns a pointer to the position in the string after the last number aquired
 
     char *position = NULL;
     position = string_ptr;
