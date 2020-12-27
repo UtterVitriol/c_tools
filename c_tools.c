@@ -18,6 +18,19 @@ int main(void)
         pEnd = int_from_str(pEnd, &num);
         printf("%d\n", num);
     }
+
+        struct array_2d my_array;
+
+    my_array.len = 3;
+
+    malloc_array_2d(&my_array, 5);
+
+    for (int i = 0; i < my_array.len; i++){
+        strcpy(my_array.arrays[i], "Test");
+    }
+
+    print_array_2d(&my_array);
+    free_array_2d(&my_array);
 }
 
 int get_input(char *buffer, int len)
@@ -39,6 +52,29 @@ int get_input(char *buffer, int len)
 	}
 
 	return 0;
+}
+
+int malloc_array_2d(struct array_2d *array, int max_string_len)
+{
+    array->arrays = malloc(array->len * sizeof(char*));
+
+    for (int i = 0; i < array->len; i++){
+        if((array->arrays[i] = malloc(max_string_len * sizeof(char))) == NULL){
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int print_array_2d(struct array_2d *array)
+{
+    // prints array_2d
+    for(int i = 0; i < array->len; i++){
+		printf("%s\n", array->arrays[i]);
+	}
+
+    return 0;       
 }
 
 int free_array_2d(struct array_2d *array)
