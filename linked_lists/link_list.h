@@ -6,10 +6,22 @@ struct list
 	struct list *next;
 };
 
-int append(struct list **, int);
+int list_new(struct list **, int);
 
-int prepend(struct list **, int);
+int list_append(struct list **, int);
 
-int print(struct list *);
+int list_prepend(struct list **, int);
 
-int free_list(struct list *);
+int list_insert(struct list **list, int pos, int val);
+
+int list_xappend(struct list *);
+
+int list_xprepend(struct list **);
+
+int list_remove(struct list **list, int pos);
+
+int list_print(struct list *);
+
+int list_free(struct list *);
+
+int list_size(struct list *list);

@@ -4,14 +4,26 @@
 
 #include "link_list.h"
 
-int append(struct list **list, int val)
+int list_new(struct list **list, int val)
 {
 	struct list *new = NULL;
 
-	if ((new = malloc(sizeof(struct list))) == NULL)
-	{
-		return 0;
-	}
+	new = malloc(sizeof(struct list));
+
+	new->val = val;
+	new->next = NULL;
+
+	*list = new;
+
+	return 1;
+}
+
+int list_append(struct list **list, int val)
+{
+	// add static pointer to end???
+	struct list *new = NULL;
+
+	new = malloc(sizeof(struct list));
 
 	struct list *pos = *list;
 
@@ -30,18 +42,14 @@ int append(struct list **list, int val)
 	}
 
 	pos->next = new;
-
 	return 1;
 }
 
-int prepend(struct list **list, int val)
+int list_prepend(struct list **list, int val)
 {
 	struct list *new = NULL;
 
-	if ((new = malloc(sizeof(struct list))) == NULL)
-	{
-		return 0;
-	}
+	new = malloc(sizeof(struct list));
 
 	new->val = val;
 	new->next = *list;
@@ -51,27 +59,100 @@ int prepend(struct list **list, int val)
 	return 1;
 }
 
-int insert(struct list *pos, int val)
+int list_insert(struct list **list, int place, int val)
 {
-	if (pos == NULL)
-	{
-		return -1;
-	}
-
 	struct list *new = NULL;
+	new = malloc(sizeof(struct list));
+	new->val = val;
 
-	if ((new = malloc(sizeof(struct list))) == NULL)
+	if (place == 0)
 	{
-		return 0;
+		new->next = *list;
+		*list = new;
+		return 1;
 	}
 
-	new->val = val;
-	new->next = pos->next;
+	struct list *pos = *list;
 
+	for (int i = 1; i < place; i++)
+	{
+		if (pos->next == NULL)
+		{
+			return 0;
+		}
+		pos = pos->next;
+	}
+
+	new->next = pos->next;
 	pos->next = new;
+
+	return 1;
 }
 
-int print(struct list *list)
+int list_xappend(struct list *list)
+{
+	struct list *last = NULL;
+
+	while (list->next != NULL)
+	{
+		last = list;
+		list = list->next;
+	}
+
+	last->next = NULL;
+
+	free(list);
+
+	return 1;
+}
+
+int list_xprepend(struct list **list)
+{
+	struct list *temp = *list;
+
+	*list = temp->next;
+
+	free(temp);
+
+	return 1;
+}
+
+int list_remove(struct list **list, int pos)
+{
+	int count = 0;
+
+	struct list *temp = *list;
+	struct list *next = NULL;
+
+	if (pos == 0)
+	{
+		list_xprepend(list);
+		return 1;
+	}
+
+	while (count < pos - 1)
+	{
+		if (temp->next == NULL)
+		{
+			next = temp->next;
+			temp->next = NULL;
+			free(next);
+			return 1;
+		}
+		temp = temp->next;
+
+		count++;
+	}
+
+	next = temp->next;
+	temp->next = temp->next->next;
+
+	free(next);
+
+	return 1;
+}
+
+int list_print(struct list *list)
 {
 	while (list != NULL)
 	{
@@ -83,7 +164,7 @@ int print(struct list *list)
 	return 1;
 }
 
-int free_list(struct list *list)
+int list_free(struct list *list)
 {
 	struct list *temp = NULL;
 
@@ -95,4 +176,16 @@ int free_list(struct list *list)
 	}
 
 	return 1;
+}
+
+int list_size(struct list *list)
+{
+	int size = 0;
+	while (list->next != NULL)
+	{
+		list = list->next;
+		size++;
+	}
+
+	return size;
 }

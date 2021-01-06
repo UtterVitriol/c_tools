@@ -7,13 +7,42 @@ int main(void)
 {
 	struct list *new = NULL;
 
-	append(&new, 10);
-	append(&new, 1555);
-	prepend(&new, 69);
+	list_new(&new, 1);
 
-	print(new);
-	puts("Heh?");
-	print(new);
+	list_append(&new, 3);
 
-	free_list(new);
+	list_insert(&new, 2, 69);
+
+	list_print(new);
+
+	puts("----");
+
+	list_remove(&new, 2);
+
+	list_print(new);
+
+	list_free(new);
+
+	/*
+	struct list *new = NULL;
+
+	struct list **last = &new;
+
+	struct list *temp = NULL;
+
+	int nums = 1000000;
+
+	for (int i = 0; i < nums; i++)
+	{
+		list_append(last, i + 1);
+		temp = *last;
+		last = &temp->next;
+	}
+
+	//list_print(new);
+
+	printf("Size: %d\n", list_size(new));
+
+	list_free(new);
+	*/
 }
