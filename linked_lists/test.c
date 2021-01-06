@@ -5,9 +5,15 @@
 
 int main(void)
 {
-	puts("test");
-	struct node *head = NULL;
-	create_new(head, 69);
+	struct list *new = NULL;
 
-	printf("hear: %d", head->val);
+	append(&new, 10);
+	append(&new, 1555);
+	prepend(&new, 69);
+
+	print(new);
+	puts("Heh?");
+	print(new);
+
+	free_list(new);
 }

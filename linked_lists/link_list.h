@@ -1,13 +1,15 @@
 #pragma once
 
-struct node
+struct list
 {
 	int val;
-	struct node *next;
+	struct list *next;
 };
 
-int create_new(struct node *, int);
+int append(struct list **, int);
 
-struct node add(struct node, struct node *);
+int prepend(struct list **, int);
 
-int swap(struct node *, int, int);
+int print(struct list *);
+
+int free_list(struct list *);
