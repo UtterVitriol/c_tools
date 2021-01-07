@@ -1,4 +1,4 @@
-//https://www.geeksforgeeks.org/linked-list-set-2-inserting-a-node/
+// https://www.geeksforgeeks.org/linked-list-set-2-inserting-a-node/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,14 +30,12 @@ int list_append(struct list **list, int val)
 	new->val = val;
 	new->next = NULL;
 
-	if (*list == NULL)
-	{
+	if (*list == NULL) {
 		*list = new;
 		return 1;
 	}
 
-	while (pos->next != NULL)
-	{
+	while (pos->next != NULL) {
 		pos = pos->next;
 	}
 
@@ -65,8 +63,7 @@ int list_insert(struct list **list, int place, int val)
 	new = malloc(sizeof(struct list));
 	new->val = val;
 
-	if (place == 0)
-	{
+	if (place == 0) {
 		new->next = *list;
 		*list = new;
 		return 1;
@@ -74,10 +71,8 @@ int list_insert(struct list **list, int place, int val)
 
 	struct list *pos = *list;
 
-	for (int i = 1; i < place; i++)
-	{
-		if (pos->next == NULL)
-		{
+	for (int i = 1; i < place; i++) {
+		if (pos->next == NULL) {
 			return 0;
 		}
 		pos = pos->next;
@@ -93,8 +88,7 @@ int list_xappend(struct list *list)
 {
 	struct list *last = NULL;
 
-	while (list->next != NULL)
-	{
+	while (list->next != NULL) {
 		last = list;
 		list = list->next;
 	}
@@ -124,16 +118,13 @@ int list_remove(struct list **list, int pos)
 	struct list *temp = *list;
 	struct list *next = NULL;
 
-	if (pos == 0)
-	{
+	if (pos == 0) {
 		list_xprepend(list);
 		return 1;
 	}
 
-	while (count < pos - 1)
-	{
-		if (temp->next == NULL)
-		{
+	while (count < pos - 1) {
+		if (temp->next == NULL) {
 			next = temp->next;
 			temp->next = NULL;
 			free(next);
@@ -154,8 +145,7 @@ int list_remove(struct list **list, int pos)
 
 int list_print(struct list *list)
 {
-	while (list != NULL)
-	{
+	while (list != NULL) {
 		printf("%d\n", list->val);
 
 		list = list->next;
@@ -168,8 +158,7 @@ int list_free(struct list *list)
 {
 	struct list *temp = NULL;
 
-	while (list != NULL)
-	{
+	while (list != NULL) {
 		temp = list->next;
 		free(list);
 		list = temp;
@@ -181,8 +170,7 @@ int list_free(struct list *list)
 int list_size(struct list *list)
 {
 	int size = 0;
-	while (list->next != NULL)
-	{
+	while (list->next != NULL) {
 		list = list->next;
 		size++;
 	}
