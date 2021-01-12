@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 #include "stack_array_i.h"
 #include "stack_array_c.h"
@@ -11,7 +12,8 @@ int eval(char *arr);
 
 int main(void)
 {
-	char arr[] = {"6+4(2*3-1)/5"};
+	// char arr[] = {"6+4(2*3-1)/5"};
+	char arr[] = {"2^2^3"};
 	char *result = convert(arr);
 
 	printf("%s\n", result);
@@ -114,6 +116,9 @@ int eval(char *arr)
 		i_pop(stack);
 
 		switch (arr[i]) {
+		case '^':
+			i_push(stack, pow(temp2, temp1));
+			continue;
 		case '*':
 			i_push(stack, temp2 * temp1);
 			continue;

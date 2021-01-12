@@ -18,7 +18,7 @@ debug: CFLAGS += -g
 debug: build
 
 build: $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(OBJ3)
+	$(CC) $(CFLAGS) $(OBJ) -o $(OBJ3) -lm
 	rm $(OBJ)
 	
 
