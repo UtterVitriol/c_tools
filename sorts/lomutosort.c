@@ -9,16 +9,16 @@ int main(void)
 {
 	time_t t;
 	srand((unsigned)time(&t));
-	int array[10] = {0};
+	int array[1000] = {0};
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1000; i++) {
 		array[i] = rand() % 1000;
-		printf("%d ", array[i]);
+		// printf("%d ", array[i]);
 	}
 	puts("");
-	quicksort(array, 0, 9);
+	quicksort(array, 0, 999);
 
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < 1000; i++) {
 		printf("%d ", array[i]);
 	}
 	puts("");
