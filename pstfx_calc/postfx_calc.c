@@ -108,47 +108,23 @@ int eval(char *arr)
 			continue;
 		}
 
-		if (arr[i] == '*') {
-			temp1 = i_top(stack);
-			i_pop(stack);
-			temp2 = i_top(stack);
-			i_pop(stack);
+		temp1 = i_top(stack);
+		i_pop(stack);
+		temp2 = i_top(stack);
+		i_pop(stack);
 
+		switch (arr[i]) {
+		case '*':
 			i_push(stack, temp2 * temp1);
-
 			continue;
-		}
-
-		if (arr[i] == '/') {
-			temp1 = i_top(stack);
-			i_pop(stack);
-			temp2 = i_top(stack);
-			i_pop(stack);
-
+		case '/':
 			i_push(stack, temp2 / temp1);
-
 			continue;
-		}
-
-		if (arr[i] == '+') {
-			temp1 = i_top(stack);
-			i_pop(stack);
-			temp2 = i_top(stack);
-			i_pop(stack);
-
+		case '+':
 			i_push(stack, temp2 + temp1);
-
 			continue;
-		}
-
-		if (arr[i] == '-') {
-			temp1 = i_top(stack);
-			i_pop(stack);
-			temp2 = i_top(stack);
-			i_pop(stack);
-
+		case '-':
 			i_push(stack, temp2 - temp1);
-
 			continue;
 		}
 	}
