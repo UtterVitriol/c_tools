@@ -9,43 +9,43 @@ int main(void)
 {
 	time_t t;
 	srand((unsigned)time(&t));
-	int array[1000] = {0};
+	int array[10] = {0};
 
-	for (int i = 0; i < 1000; i++) {
-		array[i] = rand() % 10000;
+	for (int i = 0; i < 10; i++) {
+		array[i] = rand() % 1000;
 		printf("%d ", array[i]);
 	}
 	puts("");
-	quicksort(array, 0, 999);
+	quicksort(array, 0, 9);
 
-	// for (int i = 0; i < 10; i++) {
-	// 	printf("%d ", array[i]);
-	// }
-	// puts("");
+	for (int i = 0; i < 10; i++) {
+		printf("%d ", array[i]);
+	}
+	puts("");
 }
 
 int partition(int *arr, int i, int j)
 {
-	static int count = 0;
 	int p = arr[j];
 	int l = i;
 	int r = i;
 	while (r < j) {
-		count++;
 		if (arr[r] < p) {
-			arr[l] = arr[l] ^ arr[r];
-			arr[r] = arr[l] ^ arr[r];
-			arr[l] = arr[l] ^ arr[r];
+			if (arr[r] != arr[l]) {
+				arr[l] = arr[l] ^ arr[r];
+				arr[r] = arr[l] ^ arr[r];
+				arr[l] = arr[l] ^ arr[r];
+			}
 			l++;
 		}
 		r++;
 	}
 
-	arr[l] = arr[l] ^ arr[j];
-	arr[j] = arr[l] ^ arr[j];
-	arr[l] = arr[l] ^ arr[j];
-
-	printf("Lomuto: %d\n", count);
+	if (arr[l] != arr[j]) {
+		arr[l] = arr[l] ^ arr[j];
+		arr[j] = arr[l] ^ arr[j];
+		arr[l] = arr[l] ^ arr[j];
+	}
 	return l;
 }
 

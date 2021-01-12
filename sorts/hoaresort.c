@@ -9,19 +9,19 @@ int main(void)
 {
 	time_t t;
 	srand((unsigned)time(&t));
-	int array[1000] = {0};
+	int array[10] = {0, 1, 2, 4, 3, 5, 6, 7, 8, 9};
 
-	for (int i = 0; i < 1000; i++) {
-		array[i] = rand() % 1000;
+	for (int i = 0; i < 10; i++) {
+		// array[i] = rand() % 10;
 		printf("%d ", array[i]);
 	}
 	puts("");
-	quicksort(array, 0, 999);
+	quicksort(array, 0, 9);
 
-	// for (int i = 0; i < 1000; i++) {
-	// 	printf("%d ", array[i]);
-	// }
-	// puts("");
+	for (int i = 0; i < 10; i++) {
+		printf("%d ", array[i]);
+	}
+	puts("");
 }
 
 int partition(int *arr, int l, int r)
@@ -45,7 +45,7 @@ int partition(int *arr, int l, int r)
 			arr[r] = arr[l] ^ arr[r];
 			arr[l] = arr[l] ^ arr[r];
 		} else {
-			printf("Hoare: %d\n", count);
+			// printf("Hoare: %d\n", count);
 			return r;
 		}
 	}
