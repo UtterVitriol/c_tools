@@ -67,12 +67,13 @@ struct Tree *search(struct Tree *tree, int val)
 	}
 }
 
-void del(struct Tree *tree, struct Tree *del)
+void del(struct Tree *tree, int val)
 {
-	if (del == NULL) {
+	struct Tree *new = search(tree, val);
+
+	if (new == NULL) {
 		return;
 	}
-	struct Tree *new = del;
 	struct Tree *min = NULL;
 
 	if (new == NULL) {

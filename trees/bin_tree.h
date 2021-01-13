@@ -13,7 +13,7 @@ void insert(struct Tree *tree, int val);
 
 struct Tree *search(struct Tree *tree, int val);
 
-void del(struct Tree *tree, struct Tree *del);
+void del(struct Tree *tree, int val);
 
 void print_node(struct Tree *node);
 
