@@ -13,6 +13,7 @@ struct Tree *create(int val)
 	new->left = NULL;
 	new->right = NULL;
 	new->key = val;
+	new->height = 0;
 
 	return new;
 }
@@ -39,7 +40,7 @@ struct Tree *insert_loop(struct Tree *tree, struct Tree *i)
 	}
 }
 
-void insert(struct Tree *tree, int val)
+struct Tree *insert(struct Tree *tree, int val)
 {
 	struct Tree *new = create(val);
 
@@ -47,6 +48,9 @@ void insert(struct Tree *tree, int val)
 
 	if (new->parent == NULL) {
 		free(new);
+		return NULL;
+	} else {
+		return new;
 	}
 }
 
@@ -113,7 +117,7 @@ void del(struct Tree *tree, int val)
 
 void print_node(struct Tree *node)
 {
-	printf("Val: %d\n", node->key);
+	printf("Val: %d\n", node->height);
 }
 
 void destroy(struct Tree *node)
@@ -138,8 +142,8 @@ void pre_order(struct Tree *tree, void (*fun)(struct Tree *))
 		return;
 	}
 	fun(tree);
-	post_order(tree->left, fun);
-	post_order(tree->right, fun);
+	pre_order(tree->left, fun);
+	pre_order(tree->right, fun);
 }
 
 void iter_post_order(struct Tree *tree, void (*fun)(struct Tree *))
@@ -219,9 +223,9 @@ void in_order(struct Tree *tree, void (*fun)(struct Tree *))
 	if (tree == NULL) {
 		return;
 	}
-	post_order(tree->left, fun);
+	in_order(tree->left, fun);
 	fun(tree);
-	post_order(tree->right, fun);
+	in_order(tree->right, fun);
 }
 
 void level_order(struct Tree *tree, void (*fun)(struct Tree *))
@@ -245,4 +249,122 @@ void level_order(struct Tree *tree, void (*fun)(struct Tree *))
 	}
 
 	q_destroy(queue);
+}
+
+struct Tree *rotate_right(struct Tree *node)
+{
+	if (!node || !node->parent || (node == node->parent->right)) {
+		return node;
+	}
+
+	struct Tree *p = NULL;
+	struct Tree *pp = NULL;
+	struct Tree *c = NULL;
+
+	p = node->parent;
+	pp = p->parent;
+	c = node->right;
+	node->parent = pp;
+	node->right = p;
+	p->parent = node;
+	p->left = c;
+	c->parent = p;
+
+	if (node->key > pp->key) {
+		pp->right = node;
+	} else {
+		pp->left = node;
+	}
+
+	return node;
+}
+
+struct Tree *rotate_left(struct Tree *node)
+{
+	struct Tree *p = NULL;
+	struct Tree *pp = NULL;
+	struct Tree *c = NULL;
+
+	p = node->parent;
+
+	pp = p->parent;
+
+	c = node->left;
+	node->parent = pp;
+	node->left = p;
+	p->parent = node;
+	p->right = c;
+
+	if (c) {
+		c->parent = p;
+	}
+
+	if (pp) {
+		if (node->key > pp->key) {
+			pp->right = node;
+		} else {
+			pp->left = node;
+		}
+	}
+
+	return node;
+}
+
+struct Tree *rotate_right_left(struct Tree *node)
+{
+	return rotate_left(rotate_right(node));
+}
+
+struct Tree *rotate_left_right(struct Tree *node)
+{
+	return rotate_right(rotate_left(node));
+}
+
+void avl_insert(struct Tree *node, int val)
+{
+	struct Tree *i = insert(node, val);
+
+	int bf = 0;
+
+	int temp = 0;
+
+	node->height = 1;
+
+	while (node->parent && bf <= 1) {
+		node = node->parent;
+		bf = abs(node->right->height - node->left->height);
+
+		if (node->right->height > node->left->height) {
+			temp = node->right->height + 1;
+		} else {
+			temp = node->left->height + 1;
+		}
+		node->height = temp;
+	}
+
+	if (!node->parent || bf <= 1) {
+		return;
+	}
+
+	if (i->key < node->key) {
+		if (i->key < node->left->key) {
+			node = rotate_right(node->left);
+			node->right->height = node->height - 1;
+		} else {
+			node = rotate_left_right(node->left->right);
+			node->left->height = node->height;
+			node->right->height = node->height;
+			node->height = node->height + 1;
+		}
+	} else {
+		if (i->key > node->right->key) {
+			node = rotate_left(node->right);
+			node->left->height = node->height - 1;
+		} else {
+			node = rotate_right_left(node->right->left);
+			node->left->height = node->height;
+			node->right->height = node->height;
+			node->height = node->height + 1;
+		}
+	}
 }
