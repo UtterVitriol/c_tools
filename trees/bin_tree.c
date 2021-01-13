@@ -182,7 +182,7 @@ void s_iter_post_order(struct Tree *tree, void (*fun)(struct Tree *))
 		return;
 	}
 
-	struct Stack *stack = s_create(40);
+	struct Stack *stack = s_create(10);
 	while (1) {
 		while (tree) {
 			if (tree->right != NULL) {
