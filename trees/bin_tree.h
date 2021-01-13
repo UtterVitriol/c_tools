@@ -15,6 +15,14 @@ struct Tree *search(struct Tree *tree, int val);
 
 void del(struct Tree *tree, struct Tree *del);
 
+void print_node(struct Tree *node);
+
 void destroy(struct Tree *node);
 
 void post_order(struct Tree *tree, void (*fun)(struct Tree *));
+
+void iter_post_order(struct Tree *tree, void (*fun)(struct Tree *));
+
+void s_iter_post_order(struct Tree *tree, void (*fun)(struct Tree *));
+
+void level_order(struct Tree *tree, void (*fun)(struct Tree *));
