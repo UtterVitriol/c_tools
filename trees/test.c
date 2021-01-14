@@ -5,7 +5,7 @@
 
 int main(void)
 {
-	struct Tree *tree = create(2);
+	struct Tree *tree = create(5);
 
 	// insert(tree, 1);
 	// insert(tree, 5);
@@ -13,14 +13,15 @@ int main(void)
 	// insert(tree, 6);
 	// insert(tree, 4);
 
-	avl_insert(tree, 1);
-	avl_insert(tree, 5);
-	avl_insert(tree, 3);
 	avl_insert(tree, 6);
+	avl_insert(tree, 3);
+	avl_insert(tree, 7);
 	avl_insert(tree, 4);
+	avl_insert(tree, 2);
+	avl_insert(tree, 1);
+	avl_insert(tree, 9);
+	avl_insert(tree, 8);
 	avl_insert(tree, 10);
-	avl_insert(tree, 15);
-	avl_insert(tree, 112);
 
 	// avl_del(tree, 2);
 

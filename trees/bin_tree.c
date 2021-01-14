@@ -286,7 +286,10 @@ struct Tree *rotate_right(struct Tree *node)
 	node->right = p;
 	p->parent = node;
 	p->left = c;
-	c->parent = p;
+
+	if (c) {
+		c->parent = p;
+	}
 
 	if (node->key > pp->key) {
 		pp->right = node;
