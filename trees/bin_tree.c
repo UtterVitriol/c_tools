@@ -13,7 +13,7 @@ struct Tree *create(int val)
 	new->left = NULL;
 	new->right = NULL;
 	new->key = val;
-	new->height = 0;
+	new->height = 1;
 
 	return new;
 }
@@ -44,7 +44,7 @@ struct Tree *insert(struct Tree *tree, int val)
 {
 	struct Tree *new = create(val);
 
-	insert_loop(tree, new);
+	new = insert_loop(tree, new);
 
 	if (new->parent == NULL) {
 		free(new);
@@ -135,7 +135,7 @@ struct Tree *del(struct Tree *tree, int val)
 
 void print_node(struct Tree *node)
 {
-	printf("Val: %d\n", node->key);
+	printf("Val: %d\n", node->height);
 }
 
 void destroy(struct Tree *node)
@@ -340,7 +340,7 @@ struct Tree *rotate_left_right(struct Tree *node)
 
 void avl_insert(struct Tree *node, int val)
 {
-	struct Tree *i = insert(node, val);
+	node = insert(node, val);
 
 	int bf = 0;
 
@@ -350,9 +350,20 @@ void avl_insert(struct Tree *node, int val)
 
 	while (node->parent && bf <= 1) {
 		node = node->parent;
-		bf = abs(node->right->height - node->left->height);
 
-		if (node->right->height > node->left->height) {
+		if (!node->right && node->left) {
+			bf = node->left->height;
+		} else if (!node->left && node->right) {
+			bf = node->right->height;
+		} else {
+			bf = abs(node->right->height - node->left->height);
+		}
+
+		if (!node->right && node->left) {
+			temp = node->left->height + 1;
+		} else if (!node->left && node->right) {
+			temp = node->right->height + 1;
+		} else if (node->right->height > node->left->height) {
 			temp = node->right->height + 1;
 		} else {
 			temp = node->left->height + 1;
@@ -364,8 +375,8 @@ void avl_insert(struct Tree *node, int val)
 		return;
 	}
 
-	if (i->key < node->key) {
-		if (i->key < node->left->key) {
+	if (val < node->key) {
+		if (val < node->left->key) {
 			node = rotate_right(node->left);
 			node->right->height = node->height - 1;
 		} else {
@@ -375,7 +386,7 @@ void avl_insert(struct Tree *node, int val)
 			node->height = node->height + 1;
 		}
 	} else {
-		if (i->key > node->right->key) {
+		if (val > node->right->key) {
 			node = rotate_left(node->right);
 			node->left->height = node->height - 1;
 		} else {
