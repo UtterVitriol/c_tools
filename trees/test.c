@@ -19,6 +19,12 @@ int main(void)
 	avl_insert(tree, 6);
 	avl_insert(tree, 4);
 
+	avl_del(tree, 2);
+
+	// insert(tree, 9);
+	// insert(tree, 8);
+
+	// del(tree, 8);
 	// level_order(tree, print_node);
 	// puts("");
 	// rotate_right(tree->right->left);

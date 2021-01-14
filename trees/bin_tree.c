@@ -71,28 +71,45 @@ struct Tree *search(struct Tree *tree, int val)
 	}
 }
 
-void del(struct Tree *tree, int val)
+struct Tree *del(struct Tree *tree, int val)
 {
 	struct Tree *new = search(tree, val);
 
 	if (new == NULL) {
-		return;
+		return NULL;
 	}
+
+	struct Tree *parent = new->parent;
+
+	// if (new->right == NULL && new->left == NULL) {
+	// 	if (new->parent->left == new) {
+	// 		new->parent->left = NULL;
+	// 	} else {
+	// 		new->parent->right = NULL;
+	// 	}
+	// 	destroy(new);
+	// 	return;
+	// }
+
 	struct Tree *min = NULL;
 
-	if (new == NULL) {
-		return;
-	}
 	if (new->right == NULL) {
-		new->parent->left = new;
+
+		if (new->parent->left == new) {
+			new->parent->left = new->left;
+		} else {
+			new->parent->right = new->left;
+		}
 
 		if (new->left != NULL) {
 			new->left->parent = new->parent;
 		}
 
 		destroy(new);
-		return;
+		return parent;
 	}
+
+	// check for null was already done above ^^^^^^^
 	if (new->right != NULL) {
 		min = new->right;
 	} else {
@@ -111,13 +128,14 @@ void del(struct Tree *tree, int val)
 		min->parent->left = min->right;
 	}
 
+	parent = min->parent;
 	free(min);
-	return;
+	return parent;
 }
 
 void print_node(struct Tree *node)
 {
-	printf("Val: %d\n", node->height);
+	printf("Val: %d\n", node->key);
 }
 
 void destroy(struct Tree *node)
@@ -323,6 +341,59 @@ struct Tree *rotate_left_right(struct Tree *node)
 void avl_insert(struct Tree *node, int val)
 {
 	struct Tree *i = insert(node, val);
+
+	int bf = 0;
+
+	int temp = 0;
+
+	node->height = 1;
+
+	while (node->parent && bf <= 1) {
+		node = node->parent;
+		bf = abs(node->right->height - node->left->height);
+
+		if (node->right->height > node->left->height) {
+			temp = node->right->height + 1;
+		} else {
+			temp = node->left->height + 1;
+		}
+		node->height = temp;
+	}
+
+	if (!node->parent || bf <= 1) {
+		return;
+	}
+
+	if (i->key < node->key) {
+		if (i->key < node->left->key) {
+			node = rotate_right(node->left);
+			node->right->height = node->height - 1;
+		} else {
+			node = rotate_left_right(node->left->right);
+			node->left->height = node->height;
+			node->right->height = node->height;
+			node->height = node->height + 1;
+		}
+	} else {
+		if (i->key > node->right->key) {
+			node = rotate_left(node->right);
+			node->left->height = node->height - 1;
+		} else {
+			node = rotate_right_left(node->right->left);
+			node->left->height = node->height;
+			node->right->height = node->height;
+			node->height = node->height + 1;
+		}
+	}
+}
+
+void avl_del(struct Tree *node, int val)
+{
+	struct Tree *i = del(node, val);
+
+	if (!i) {
+		return;
+	}
 
 	int bf = 0;
 

@@ -14,7 +14,7 @@ struct Tree *insert(struct Tree *tree, int val);
 
 struct Tree *search(struct Tree *tree, int val);
 
-void del(struct Tree *tree, int val);
+struct Tree *del(struct Tree *tree, int val);
 
 void print_node(struct Tree *node);
 
@@ -41,3 +41,5 @@ struct Tree *rotate_right_left(struct Tree *node);
 struct Tree *rotate_left_right(struct Tree *node);
 
 void avl_insert(struct Tree *node, int val);
+
+void avl_del(struct Tree *node, int val);
