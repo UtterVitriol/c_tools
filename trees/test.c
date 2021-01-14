@@ -18,6 +18,9 @@ int main(void)
 	avl_insert(tree, 3);
 	avl_insert(tree, 6);
 	avl_insert(tree, 4);
+	avl_insert(tree, 10);
+	avl_insert(tree, 15);
+	avl_insert(tree, 112);
 
 	// avl_del(tree, 2);
 
@@ -52,7 +55,7 @@ int main(void)
 
 	// printf("val: %d\n", search(tree, 30)->key);
 
-	level_order(tree, print_node);
+	in_order(tree, print_node);
 
 	// iter_post_order(tree, print_node);
 	// s_iter_post_order(tree, print_node);

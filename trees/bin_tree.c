@@ -135,7 +135,7 @@ struct Tree *del(struct Tree *tree, int val)
 
 void print_node(struct Tree *node)
 {
-	printf("Val: %d\n", node->height);
+	printf("Val: %d\n", node->key);
 }
 
 void destroy(struct Tree *node)
