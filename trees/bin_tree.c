@@ -403,9 +403,9 @@ void avl_insert(struct Tree *node, int val)
 
 void avl_del(struct Tree *node, int val)
 {
-	struct Tree *i = del(node, val);
+	node = del(node, val);
 
-	if (!i) {
+	if (!node) {
 		return;
 	}
 
@@ -417,9 +417,20 @@ void avl_del(struct Tree *node, int val)
 
 	while (node->parent && bf <= 1) {
 		node = node->parent;
-		bf = abs(node->right->height - node->left->height);
 
-		if (node->right->height > node->left->height) {
+		if (!node->right && node->left) {
+			bf = node->left->height;
+		} else if (!node->left && node->right) {
+			bf = node->right->height;
+		} else {
+			bf = abs(node->right->height - node->left->height);
+		}
+
+		if (!node->right && node->left) {
+			temp = node->left->height + 1;
+		} else if (!node->left && node->right) {
+			temp = node->right->height + 1;
+		} else if (node->right->height > node->left->height) {
 			temp = node->right->height + 1;
 		} else {
 			temp = node->left->height + 1;
@@ -431,8 +442,8 @@ void avl_del(struct Tree *node, int val)
 		return;
 	}
 
-	if (i->key < node->key) {
-		if (i->key < node->left->key) {
+	if (val < node->key) {
+		if (val < node->left->key) {
 			node = rotate_right(node->left);
 			node->right->height = node->height - 1;
 		} else {
@@ -442,7 +453,7 @@ void avl_del(struct Tree *node, int val)
 			node->height = node->height + 1;
 		}
 	} else {
-		if (i->key > node->right->key) {
+		if (val > node->right->key) {
 			node = rotate_left(node->right);
 			node->left->height = node->height - 1;
 		} else {

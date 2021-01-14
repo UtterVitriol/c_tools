@@ -18,13 +18,23 @@ int main(void)
 	avl_insert(tree, 7);
 	avl_insert(tree, 4);
 	avl_insert(tree, 2);
+	avl_insert(tree, 123);
 	avl_insert(tree, 1);
 	avl_insert(tree, 9);
 	avl_insert(tree, 8);
 	avl_insert(tree, 10);
 
-	// avl_del(tree, 2);
+	avl_insert(tree, 5125);
+	avl_insert(tree, 2125);
+	avl_insert(tree, 1125);
+	avl_insert(tree, 325);
 
+	avl_insert(tree, 5126);
+	avl_insert(tree, 5127);
+	avl_insert(tree, 5128);
+
+	avl_del(tree, 1125);
+	avl_del(tree, 5127);
 	// insert(tree, 9);
 	// insert(tree, 8);
 
