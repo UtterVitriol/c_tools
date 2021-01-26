@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #include "graph.h"
 #include "queue/queue.h"
@@ -29,10 +30,10 @@ int main(void)
 			continue;
 		}
 
-		word = strtok(line, " \n");
+		word = strtok(line, " \t\n");
 		src = strtol(word, &endptr, 10);
 
-		word = strtok(NULL, " \n");
+		word = strtok(NULL, " \t\n");
 		dst = strtol(word, &endptr, 10);
 
 		add_edge(graph, src, dst);
@@ -64,14 +65,14 @@ u64 get_greatest(FILE *fp)
 			continue;
 		}
 
-		word = strtok(line, " \n");
+		word = strtok(line, " \t\n");
 		temp = strtol(word, &endptr, 10);
 
 		if (temp > greatest) {
 			greatest = temp;
 		}
 
-		word = strtok(NULL, " \n");
+		word = strtok(NULL, " \t\n");
 		temp = strtol(word, &endptr, 10);
 
 		if (temp > greatest) {
@@ -188,6 +189,7 @@ u64 triangle_count(Graph *graph)
 		}
 		free(arr);
 	}
+
 	return count;
 }
 
@@ -195,10 +197,15 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 {
 	// change this to get node based on start value instead of providing it
 	// in the function call
+	time_t seconds1;
+	time_t seconds2;
+
+	seconds1 = time(NULL);
 	puts("\n\n\n\n\n\n");
 	u64 *visited = calloc(graph->v, sizeof(u64));
-	Queue *q = create((graph->v * graph->v / 2));
+	Queue *q = create((graph->v * 2));
 
+	u64 count = 0;
 	enqueue(q, node);
 
 	visited[start] = 1;
@@ -208,17 +215,21 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 		dequeue(q);
 
 		while (temp) {
+			count++;
 			if (!visited[temp->dest]) {
 				enqueue(q, graph->array[temp->dest]);
 				visited[temp->dest] = 1;
-				printf(" -> %lu", temp->dest);
+				// printf(" -> %lu", temp->dest);
 			}
 			temp = temp->next;
 		}
 	}
+	seconds2 = time(NULL);
 
 	puts("");
 
+	printf("Edges?: %lu\n", count);
+	printf("Time: %lu\n", seconds2 - seconds1);
 	free(visited);
 	destroy(q);
 
