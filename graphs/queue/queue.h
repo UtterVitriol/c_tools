@@ -11,10 +11,10 @@ typedef struct Queue {
 	int size;
 } Queue;
 
-Queue *create(int size);
-void destroy(Queue *queue);
-Node *front(Queue *queue);
-void enqueue(Queue *queue, Node *val);
-void dequeue(Queue *queue);
-int size(Queue *queue);
-int empty(Queue *queue);
+Queue *queue_create(int size);
+void queue_destroy(Queue *queue);
+Node *queue_front(Queue *queue);
+void queue_enqueue(Queue *queue, Node *val);
+void queue_dequeue(Queue *queue);
+int queue_size(Queue *queue);
+int queue_empty(Queue *queue);

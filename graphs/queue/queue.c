@@ -4,7 +4,7 @@
 
 #include "queue.h"
 
-Queue *create(int size)
+Queue *queue_create(int size)
 {
 	Queue *new = malloc(sizeof(Queue));
 
@@ -18,15 +18,15 @@ Queue *create(int size)
 	return new;
 }
 
-void destroy(Queue *queue)
+void queue_destroy(Queue *queue)
 {
 	free(queue->queue);
 	free(queue);
 }
 
-Node *front(Queue *queue)
+Node *queue_front(Queue *queue)
 {
-	if (size(queue) > 0) {
+	if (queue_size(queue) > 0) {
 		return queue->queue[queue->head];
 	} else {
 		puts("empty queue");
@@ -34,7 +34,7 @@ Node *front(Queue *queue)
 	}
 }
 
-void enqueue(Queue *queue, Node *val)
+void queue_enqueue(Queue *queue, Node *val)
 {
 	if (queue->head == queue->tail && queue->size > 0) {
 		puts("queue full");
@@ -51,7 +51,7 @@ void enqueue(Queue *queue, Node *val)
 	}
 }
 
-void dequeue(Queue *queue)
+void queue_dequeue(Queue *queue)
 {
 
 	if (queue->size > 0) {
@@ -71,12 +71,12 @@ void dequeue(Queue *queue)
 	}
 }
 
-int size(Queue *queue)
+int queue_size(Queue *queue)
 {
 	return queue->size;
 }
 
-int empty(Queue *queue)
+int queue_empty(Queue *queue)
 {
 	if (queue->head == queue->tail || queue->size <= 0) {
 		return 1;

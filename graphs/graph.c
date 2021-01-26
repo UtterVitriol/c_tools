@@ -5,13 +5,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <limits.h>
+#include <stdint.h>
 
 #include "graph.h"
 #include "queue/queue.h"
+#include "stack/stack.h"
 
 int main(void)
 {
-	FILE *fp = fopen("small.txt", "r");
+	FILE *fp = fopen("facebook.txt", "r");
 	u64 s = 0;
 	char *line = NULL;
 	char *endptr = NULL;
@@ -40,8 +43,9 @@ int main(void)
 	}
 
 	// print_graph(graph);
-	// breadth_first(graph, graph->array[4038], 4038);
-	printf("Number of triangles: %lu\n", triangle_count(graph) / 6);
+	// breadth_first(graph, graph->array[0], 0);
+	depth_first(graph, 0);
+	// printf("Number of triangles: %lu\n", triangle_count(graph) / 6);
 	destroy_graph(graph);
 
 	if (line) {
@@ -193,6 +197,41 @@ u64 triangle_count(Graph *graph)
 	return count;
 }
 
+int depth_first(Graph *graph, u64 start)
+{
+	puts("\n\n\n\n\n\n");
+	u64 *visited = calloc(graph->v, sizeof(u64));
+
+	Stack *stack = stack_create((graph->v * 2));
+
+	u64 count = 0;
+	stack_push(stack, graph->array[start]);
+
+	visited[start] = 1;
+	printf("%lu -> %lu", start, graph->array[start]->dest);
+	while (!stack_empty(stack)) {
+		Node *temp = stack_top(stack);
+		stack_pop(stack);
+
+		while (temp) {
+			count++;
+			if (!visited[temp->dest]) {
+				stack_push(stack, graph->array[temp->dest]);
+				visited[temp->dest] = 1;
+				printf(" -> %lu", temp->dest);
+			}
+			temp = temp->next;
+		}
+	}
+
+	puts("");
+	printf("Edges?: %lu\n", count);
+	free(visited);
+	stack_destroy(stack);
+
+	return 1;
+}
+
 int breadth_first(Graph *graph, Node *node, u64 start)
 {
 	// change this to get node based on start value instead of providing it
@@ -203,21 +242,21 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 	seconds1 = time(NULL);
 	puts("\n\n\n\n\n\n");
 	u64 *visited = calloc(graph->v, sizeof(u64));
-	Queue *q = create((graph->v * 2));
+	Queue *q = queue_create((graph->v * 2));
 
 	u64 count = 0;
-	enqueue(q, node);
+	queue_enqueue(q, node);
 
 	visited[start] = 1;
 	printf("%lu -> %lu", start, node->dest);
-	while (!empty(q)) {
-		Node *temp = front(q);
-		dequeue(q);
+	while (!queue_empty(q)) {
+		Node *temp = queue_front(q);
+		queue_dequeue(q);
 
 		while (temp) {
 			count++;
 			if (!visited[temp->dest]) {
-				enqueue(q, graph->array[temp->dest]);
+				queue_enqueue(q, graph->array[temp->dest]);
 				visited[temp->dest] = 1;
 				// printf(" -> %lu", temp->dest);
 			}
@@ -231,7 +270,7 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 	printf("Edges?: %lu\n", count);
 	printf("Time: %lu\n", seconds2 - seconds1);
 	free(visited);
-	destroy(q);
+	queue_destroy(q);
 
 	return 1;
 }

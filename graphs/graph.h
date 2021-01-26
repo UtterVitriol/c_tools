@@ -20,6 +20,7 @@ void add_edge(Graph *graph, u64 src, u64 dst);
 void destroy_list(Node *node);
 void print_graph(Graph *graph);
 int breadth_first(Graph *graph, Node *node, u64 start);
+int depth_first(Graph *graph, u64 start);
 void destroy_graph(Graph *graph);
 u64 get_greatest(FILE *fp);
 u64 triangle_count(Graph *graph);
