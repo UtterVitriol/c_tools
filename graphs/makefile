@@ -4,12 +4,14 @@ CFLAGS= -Wall -Wextra -Wpedantic -Waggregate-return -Wwrite-strings -Wvla -Wfloa
 OBJ1 = graph
 OBJ2 = queue/queue
 OBJ3 = stack/stack
+OBJ4 = min_heap/min_heap
 
 DEPS1 = $(OBJ1).c $(OBJ1).h $(OBJ2).h
 DEPS2 = $(OBJ2).c $(OBJ2).h $(OBJ1).h
 DEPS3 = $(OBJ3).c $(OBJ3).h $(OBJ1).h
+DEPS4 = $(OBJ4).c $(OBJ4).h $(OBJ1).h
 
-OBJ = $(OBJ1).o $(OBJ2).o $(OBJ3).o
+OBJ = $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o
 
 all: build
 
@@ -46,3 +48,6 @@ $(OBJ2).o : $(DEPS2)
 
 $(OBJ3).o : $(DEPS3)
 	$(CC) -c $(CFLAGS) $(OBJ3).c -o $(OBJ3).o
+
+$(OBJ4).o : $(DEPS3)
+	$(CC) -c $(CFLAGS) $(OBJ4).c -o $(OBJ4).o

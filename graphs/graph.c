@@ -1,4 +1,5 @@
 // inspiration from https://www.geeksforgeeks.org/graph-and-its-representations/
+// https://www.geeksforgeeks.org/dijkstras-algorithm-for-adjacency-list-representation-greedy-algo-8/
 #define _GNU_SOURCE
 
 #include <stdio.h>
@@ -11,6 +12,7 @@
 #include "graph.h"
 #include "queue/queue.h"
 #include "stack/stack.h"
+#include "min_heap/min_heap.h"
 
 int main(void)
 {
@@ -44,8 +46,9 @@ int main(void)
 
 	// print_graph(graph);
 	// breadth_first(graph, graph->array[0], 0);
-	depth_first(graph, 0);
+	// depth_first(graph, 0);
 	// printf("Number of triangles: %lu\n", triangle_count(graph) / 6);
+	dijkstra(graph, 5);
 	destroy_graph(graph);
 
 	if (line) {
@@ -111,6 +114,7 @@ Node *create_node(u64 dest)
 {
 	Node *new = malloc(sizeof(Node));
 	new->dest = dest;
+	new->weight = 3;
 	new->next = NULL;
 
 	return new;
@@ -273,4 +277,92 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 	queue_destroy(q);
 
 	return 1;
+}
+
+void decrease_key(Heap *heap, u64 v, u64 dist)
+{
+	int i = heap->pos[v];
+
+	heap->array[i]->dist = dist;
+
+	while (i && heap->array[i]->dist < heap->array[(i - 1) / 2]->dist) {
+		heap->pos[heap->array[i]->v] = (i - 1) / 2;
+
+		heap->pos[heap->array[(i - 1) / 2]->v] = i;
+
+		Item *temp = NULL;
+
+		temp = heap->array[i];
+		heap->array[i] = heap->array[(i - 1) / 2];
+		heap->array[(i - 1) / 2] = temp;
+
+		i = (i - 1) / 2;
+	}
+}
+
+void print_paths(u64 *dist, u64 n)
+{
+	puts("V Dist from Src");
+	for (u64 i = 0; i < n; i++) {
+		printf("%lu \t\t %lu\n", i, dist[i]);
+	}
+}
+
+void dijkstra(Graph *graph, u64 start)
+{
+	u64 V = graph->v;
+
+	u64 *dist = malloc(V * sizeof(u64));
+
+	Heap *heap = create_heap(V);
+
+	for (u64 v = 0; v < V; v++) {
+		dist[v] = ULONG_MAX;
+		heap->array[v] = create_item(v, dist[v]);
+		heap->pos[v] = v;
+	}
+
+	heap->array[start] = create_item(start, dist[start]);
+	heap->pos[start] = start;
+	dist[start] = 0;
+	decrease_key(heap, start, dist[start]);
+
+	heap->count = V;
+
+	while (heap->count > 0) {
+		Item *h_node = heap_extract(heap);
+
+		u64 u = h_node->v;
+
+		Node *crawl = graph->array[u];
+
+		while (crawl) {
+			u64 v = crawl->dest;
+
+			// need to add weights.....
+			if (/*isminheap(v)???*/ dist[u] != ULONG_MAX &&
+			    crawl->weight + dist[u] < dist[v]) {
+				dist[v] = dist[u] + crawl->weight;
+
+				decrease_key(heap, v, dist[v]);
+			}
+
+			crawl = crawl->next;
+		}
+	}
+
+	// u64 *heap = calloc(graph->v, sizeof(u64));
+
+	// for (u64 i = 0; i < graph->v; i++) {
+	// 	if (i != start) {
+	// 		d[i] = ULONG_MAX;
+	// 	}
+	// }
+
+	print_paths(dist, V);
+
+	// free(heap->array);
+	// free(heap);
+	free(dist);
+	free(heap);
 }

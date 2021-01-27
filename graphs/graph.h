@@ -1,4 +1,5 @@
 #pragma once
+#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 
@@ -6,6 +7,7 @@
 
 typedef struct Node {
 	u64 dest;
+	int weight;
 	struct Node *next;
 } Node;
 
@@ -24,3 +26,4 @@ int depth_first(Graph *graph, u64 start);
 void destroy_graph(Graph *graph);
 u64 get_greatest(FILE *fp);
 u64 triangle_count(Graph *graph);
+void dijkstra(Graph *graph, u64 start);

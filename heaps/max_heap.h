@@ -1,23 +1,23 @@
-// Paul Burkhardt
-// 01/06/2020
-//
-// Tutorial for a max heap.
-//------------------------------------------------------------------------------
-#ifndef __MAX_HEAP_
-#define __MAX_HEAP_
-void heapsort(int, int *);
+#pragma once
 
-// make array heap order
-void buildheap(int, int *);
+typedef struct Item {
+	char val;
+	int key;
+} Item;
 
-// corrections
-void heapify_downshift(int, int *, int);
-void heapify_upshift(int, int *);
+typedef struct Heap {
+	Item **array;
+	int count;
+	int size;
+} Heap;
 
-// insert and remove?
-void heap_insert(int, int *, int);
-void heap_extract(int, int *);
+Heap *create_heap(int size);
+Item *create_item(char item, int key);
 
-// is array in heap order?
-int heap_order(int, int *);
-#endif
+void heapsort(int len, Heap *heap);
+void buildheap(int len, Heap *heap);
+void heapify_downshift(int index, Heap *heap, int len);
+void heapify_upshift(Heap *heap, int index);
+void heap_insert(Heap *heap, char val, int key);
+Item *heap_extract(Heap *heap);
+// int heap_order(int, int *);
