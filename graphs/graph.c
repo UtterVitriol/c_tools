@@ -16,13 +16,14 @@
 
 int main(void)
 {
-	FILE *fp = fopen("facebook.txt", "r");
+	FILE *fp = fopen("small.txt", "r");
 	u64 s = 0;
 	char *line = NULL;
 	char *endptr = NULL;
 	char *word = NULL;
 	u64 src = 0;
 	u64 dst = 0;
+	u64 weight = 0;
 
 	u64 size = 0;
 
@@ -41,14 +42,17 @@ int main(void)
 		word = strtok(NULL, " \t\n");
 		dst = strtol(word, &endptr, 10);
 
-		add_edge(graph, src, dst);
+		word = strtok(NULL, " \t\n");
+		weight = strtol(word, &endptr, 10);
+
+		add_edge(graph, src, dst, weight);
 	}
 
 	// print_graph(graph);
-	// breadth_first(graph, graph->array[0], 0);
+	// breadth_first(graph, graph->array[6], 6);
 	// depth_first(graph, 0);
 	// printf("Number of triangles: %lu\n", triangle_count(graph) / 6);
-	dijkstra(graph, 5);
+	dijkstra(graph, 6);
 	destroy_graph(graph);
 
 	if (line) {
@@ -110,23 +114,24 @@ Graph *init_graph(u64 size)
 	return new;
 }
 
-Node *create_node(u64 dest)
+Node *create_node(u64 dest, u64 weight, u64 v)
 {
 	Node *new = malloc(sizeof(Node));
 	new->dest = dest;
-	new->weight = 3;
+	new->weight = weight;
+	new->v = v;
 	new->next = NULL;
 
 	return new;
 }
 
-void add_edge(Graph *graph, u64 src, u64 dst)
+void add_edge(Graph *graph, u64 src, u64 dst, u64 weight)
 {
-	Node *new = create_node(dst);
+	Node *new = create_node(dst, weight, src);
 	new->next = graph->array[src];
 	graph->array[src] = new;
 
-	new = create_node(src);
+	new = create_node(src, weight, dst);
 	new->next = graph->array[dst];
 	graph->array[dst] = new;
 }
@@ -236,12 +241,34 @@ int depth_first(Graph *graph, u64 start)
 	return 1;
 }
 
+void print_path(u64 *p, u64 size, u64 start)
+{
+	printf("%lu\n", start);
+	u64 temp = 0;
+	for (u64 i = 0; i < size; i++) {
+		if (i == start) {
+			continue;
+		}
+		temp = p[i];
+		printf("%lu <- ", i);
+		while (temp != start) {
+			printf("%lu <- ", temp);
+			temp = p[temp];
+		}
+		printf("%lu\n", start);
+	}
+
+	printf("\n\nB: %lu\n", p[1]);
+}
+
 int breadth_first(Graph *graph, Node *node, u64 start)
 {
 	// change this to get node based on start value instead of providing it
 	// in the function call
 	time_t seconds1;
 	time_t seconds2;
+
+	u64 *p = calloc(graph->v, sizeof(u64));
 
 	seconds1 = time(NULL);
 	puts("\n\n\n\n\n\n");
@@ -260,6 +287,9 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 		while (temp) {
 			count++;
 			if (!visited[temp->dest]) {
+				p[temp->dest] = temp->v;
+				// parent array goes here....
+				// parent of temp->dest is temp
 				queue_enqueue(q, graph->array[temp->dest]);
 				visited[temp->dest] = 1;
 				// printf(" -> %lu", temp->dest);
@@ -273,6 +303,10 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 
 	printf("Edges?: %lu\n", count);
 	printf("Time: %lu\n", seconds2 - seconds1);
+
+	print_path(p, graph->v, start);
+
+	free(p);
 	free(visited);
 	queue_destroy(q);
 
@@ -314,6 +348,8 @@ void dijkstra(Graph *graph, u64 start)
 
 	u64 *dist = malloc(V * sizeof(u64));
 
+	u64 *p = calloc(graph->v, sizeof(u64));
+
 	Heap *heap = create_heap(V);
 
 	for (u64 v = 0; v < V; v++) {
@@ -343,7 +379,8 @@ void dijkstra(Graph *graph, u64 start)
 			if (/*isminheap(v)???*/ dist[u] != ULONG_MAX &&
 			    crawl->weight + dist[u] < dist[v]) {
 				dist[v] = dist[u] + crawl->weight;
-
+				// parent array goes here.
+				p[crawl->dest] = crawl->v;
 				decrease_key(heap, v, dist[v]);
 			}
 
@@ -351,18 +388,12 @@ void dijkstra(Graph *graph, u64 start)
 		}
 	}
 
-	// u64 *heap = calloc(graph->v, sizeof(u64));
-
-	// for (u64 i = 0; i < graph->v; i++) {
-	// 	if (i != start) {
-	// 		d[i] = ULONG_MAX;
-	// 	}
-	// }
-
 	print_paths(dist, V);
 
 	// free(heap->array);
 	// free(heap);
+	print_path(p, graph->v, start);
+	free(p);
 	free(dist);
 	free(heap);
 }

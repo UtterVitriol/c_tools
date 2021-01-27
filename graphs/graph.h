@@ -7,7 +7,8 @@
 
 typedef struct Node {
 	u64 dest;
-	int weight;
+	u64 weight;
+	u64 v;
 	struct Node *next;
 } Node;
 
@@ -17,8 +18,8 @@ typedef struct Graph {
 } Graph;
 
 Graph *init_graph(u64 size);
-Node *create_node(u64 dest);
-void add_edge(Graph *graph, u64 src, u64 dst);
+Node *create_node(u64 dest, u64 weight, u64 v);
+void add_edge(Graph *graph, u64 src, u64 dst, u64 weight);
 void destroy_list(Node *node);
 void print_graph(Graph *graph);
 int breadth_first(Graph *graph, Node *node, u64 start);
