@@ -257,8 +257,6 @@ void print_path(u64 *p, u64 size, u64 start)
 		}
 		printf("%lu\n", start);
 	}
-
-	printf("\n\nB: %lu\n", p[1]);
 }
 
 int breadth_first(Graph *graph, Node *node, u64 start)
@@ -273,7 +271,7 @@ int breadth_first(Graph *graph, Node *node, u64 start)
 	seconds1 = time(NULL);
 	puts("\n\n\n\n\n\n");
 	u64 *visited = calloc(graph->v, sizeof(u64));
-	Queue *q = queue_create((graph->v * 2));
+	Queue *q = queue_create((graph->v));
 
 	u64 count = 0;
 	queue_enqueue(q, node);
@@ -388,7 +386,7 @@ void dijkstra(Graph *graph, u64 start)
 		}
 	}
 
-	print_paths(dist, V);
+	// print_paths(dist, V);
 
 	// free(heap->array);
 	// free(heap);
